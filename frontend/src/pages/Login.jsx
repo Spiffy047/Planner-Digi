@@ -1,27 +1,57 @@
-import { useState } from 'react'
-import { supabase } from '../supabase'
+import { useState } from "react";
+import { supabase } from "../supabaseClient";
 
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState(null)
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
+  const [message, setMessage] = useState("");
 
-  const handleLogin = async (e) => {
-    e.preventDefault()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) setError(error.message)
-    else window.location.href = '/dashboard'
-  }
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const { email, password } = formData;
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      setMessage("❌ " + error.message);
+    } else {
+      setMessage("✅ Login successful!");
+      // Example: save session
+      localStorage.setItem("supabaseSession", JSON.stringify(data.session));
+    }
+  };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-        <button type="submit">Login</button>
-      </form>
-      {error && <p style={{color:'red'}}>{error}</p>}
+    <div className="page">
+      <div className="form-page">
+        <h1>Welcome Back</h1>
+        <form className="form" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+        {message && <p>{message}</p>}
+      </div>
     </div>
-  )
+  );
 }

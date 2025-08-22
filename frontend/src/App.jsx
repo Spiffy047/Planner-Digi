@@ -1,26 +1,40 @@
-import React from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
-import Home from './pages/Home'
-import Dashboard from './pages/Dashboard'
-import Goals from './pages/Goals'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./pages/Navbar";        
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
+import Goals from "./pages/Goals";
+import AuthRoute from "./pages/AuthRoute";  
 
 export default function App() {
   return (
-    <div>
-      <nav>
-        <Link to="/">Home</Link> |{" "}
-        <Link to="/dashboard">Dashboard</Link> |{" "}
-        <Link to="/goals">Goals</Link>
-      </nav>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/goals" element={<Goals />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
-    </div>
-  )
+    <>
+      <Navbar />
+      <main className="main">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/dashboard"
+            element={
+              <AuthRoute>
+                <Dashboard />
+              </AuthRoute>
+            }
+          />
+          <Route
+            path="/goals"
+            element={
+              <AuthRoute>
+                <Goals />
+              </AuthRoute>
+            }
+          />
+        </Routes>
+      </main>
+    </>
+  );
 }
