@@ -1,34 +1,46 @@
-import { useEffect, useState } from "react";
-import { supabase } from "../supabaseClient";
+import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
+import { supabase } from "../supabase";
 
-export default function AuthRoute({ children }) {
+export default function AuthRoute({ children, adminOnly = false }) {
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    const session = supabase.auth.getSession().then(({ data }) => {
-      if (data.session) {
-        setAuthenticated(true);
+    const checkUser = async () => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const sessionUser = sessionData?.session?.user || null;
+
+      if (!sessionUser) {
+        setLoading(false);
+        return;
       }
+
+      // Fetch user role
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", sessionUser.id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching user role:", error.message);
+        setUser(null);
+      } else {
+        setUser({ ...sessionUser, role: profile.role });
+      }
+
       setLoading(false);
-    });
+    };
 
-    // Optional: Listen to auth state changes
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setAuthenticated(!!session);
-    });
-
-    return () => listener.subscription.unsubscribe();
+    checkUser();
   }, []);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  if (loading) return <p>Loading...</p>;
 
-  if (!authenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  if (!user) return <Navigate to="/login" replace />;
+
+  if (adminOnly && user.role !== "admin") return <Navigate to="/" replace />;
 
   return children;
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "../supabaseClient";
+import { supabase } from "../supabase";
 import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
@@ -15,15 +15,16 @@ export default function Signup() {
     e.preventDefault();
     const { email, password } = formData;
 
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ email, password });
 
     if (error) {
       setMessage("❌ " + error.message);
     } else {
+      // Add profile with role 'user'
+      await supabase.from("profiles").insert([{ id: data.user.id, role: "user" }]);
+
       setMessage("✅ Signup successful! Check your email for confirmation.");
-      setTimeout(() => {
-        navigate("/login"); // go to login after a short delay
-      }, 2000);
+      navigate("/login"); // send user to login after signup
     }
   };
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "../supabaseClient";
+import { supabase } from "../supabase";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -15,22 +15,32 @@ export default function Login() {
     e.preventDefault();
     const { email, password } = formData;
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       setMessage("❌ " + error.message);
     } else {
+      // Fetch user role
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .single();
+
+      if (profileError) {
+        setMessage("❌ Could not fetch user role.");
+        return;
+      }
+
       setMessage("✅ Login successful!");
-      // Save session if you want
       localStorage.setItem("supabaseSession", JSON.stringify(data.session));
 
-      // Redirect to goals page
-      setTimeout(() => {
+      // Redirect based on role
+      if (profileData.role === "admin") {
+        navigate("/admin");
+      } else {
         navigate("/goals");
-      }, 1000);
+      }
     }
   };
 

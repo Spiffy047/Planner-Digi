@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Goals from "./pages/Goals";
+import Admin from "./pages/Admin";
 import AuthRoute from "./pages/AuthRoute";  
 
 export default function App() {
@@ -18,7 +19,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
-          {/* Protected Routes */}
+          {/* Protected User Routes */}
           <Route
             path="/dashboard"
             element={
@@ -32,6 +33,16 @@ export default function App() {
             element={
               <AuthRoute>
                 <Goals />
+              </AuthRoute>
+            }
+          />
+
+          {/* Admin-Only Route */}
+          <Route
+            path="/admin"
+            element={
+              <AuthRoute adminOnly={true}>
+                <Admin />
               </AuthRoute>
             }
           />
