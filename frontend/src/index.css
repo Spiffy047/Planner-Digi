@@ -22,6 +22,10 @@ a {
   color: inherit;
 }
 
+ul {
+  list-style: none; /* Remove bullets from navbar and other lists */
+}
+
 /* === Navbar === */
 .navbar {
   position: sticky;
@@ -67,7 +71,7 @@ a {
   transform: translateY(-2px);
 }
 
-/* === Logout button style === */
+/* === Logout button === */
 .logout-btn {
   background: #ef4444;
   color: #fff;
@@ -128,7 +132,8 @@ a {
   margin-top: 1rem;
 }
 
-.form input {
+.form input,
+.form select {
   padding: 1rem;
   border: 1px solid #cbd5e1;
   border-radius: 12px;
@@ -137,7 +142,8 @@ a {
   transition: all 0.25s ease;
 }
 
-.form input:focus {
+.form input:focus,
+.form select:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
 }
@@ -202,6 +208,85 @@ a {
 .deposit-section button:hover {
   background: #059669;
   transform: translateY(-2px);
+}
+
+/* === Edit Goal Cards === */
+.edit-goal-card {
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  margin-top: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.edit-goal-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.edit-goal-card .form {
+  margin-top: 0;
+}
+
+.edit-goal-card .form button {
+  background: #10b981;
+}
+
+.edit-goal-card .form button:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+
+/* === Admin Cards === */
+.admin-card {
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.admin-card h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.admin-card p {
+  color: #475569;
+  margin-bottom: 0.5rem;
+}
+
+.admin-card .btn {
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 0.5rem;
+}
+
+.admin-card .btn-delete {
+  background: #ef4444;
+}
+
+.admin-card .btn-delete:hover {
+  background: #dc2626;
+}
+
+.admin-card .btn-reset {
+  background: #facc15;
+}
+
+.admin-card .btn-reset:hover {
+  background: #eab308;
 }
 
 /* === Progress Bars === */

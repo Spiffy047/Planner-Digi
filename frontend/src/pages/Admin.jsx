@@ -5,11 +5,12 @@ export default function Admin() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch users and their profile info
   useEffect(() => {
     const fetchUsers = async () => {
       const { data: profiles, error } = await supabase
         .from("profiles")
-        .select("id, role, created_at");
+        .select("id, full_name, email, role, created_at");
 
       if (error) {
         console.error("Error fetching users:", error);
@@ -22,6 +23,7 @@ export default function Admin() {
     fetchUsers();
   }, []);
 
+  // Delete a user
   const handleDeleteUser = async (userId) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
@@ -33,6 +35,7 @@ export default function Admin() {
     }
   };
 
+  // Reset all goals for a user
   const handleResetGoals = async (userId) => {
     if (!window.confirm("Reset all goals for this user?")) return;
 
@@ -52,17 +55,38 @@ export default function Admin() {
 
   return (
     <div className="page">
-      <h1>Your Admin Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
       {users.length === 0 ? (
         <p>No users found.</p>
       ) : (
         <div className="goals-list">
           {users.map(user => (
             <div key={user.id} className="goal-card">
-              <h2>User ID: {user.id}</h2>
-              <p>Role: {user.role}</p>
+              <h2>{user.full_name || "No Name"}</h2>
+              <p>Email: {user.email || "No Email"}</p>
+              <p>Role: 
+                <select
+                  value={user.role}
+                  onChange={async (e) => {
+                    const newRole = e.target.value;
+                    const { error } = await supabase
+                      .from("profiles")
+                      .update({ role: newRole })
+                      .eq("id", user.id);
+
+                    if (!error) {
+                      setUsers(users.map(u => u.id === user.id ? { ...u, role: newRole } : u));
+                    }
+                  }}
+                  className="form-select"
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </p>
               <p>Joined: {new Date(user.created_at).toLocaleDateString()}</p>
-              <div className="deposit-section">
+
+              <div className="deposit-section mt-3">
                 <button
                   className="logout-btn"
                   onClick={() => handleDeleteUser(user.id)}
