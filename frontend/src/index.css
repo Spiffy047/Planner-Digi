@@ -22,6 +22,10 @@ a {
   color: inherit;
 }
 
+ul {
+  list-style: none;
+}
+
 /* === Navbar === */
 .navbar {
   position: sticky;
@@ -36,7 +40,6 @@ a {
   color: #fff;
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  list-style: none;
 }
 
 .logo {
@@ -51,18 +54,16 @@ a {
   display: flex;
   gap: 1.5rem;
   align-items: center;
-  list-style: none;
-  padding-left: 0;
 }
 
 .nav-links a,
 .nav-links button {
-  padding: 0.4rem 0.8rem;
+  padding: 0.5rem 1rem;
   font-weight: 500;
   border-radius: 8px;
   transition: all 0.2s ease;
-  background: transparent;
   border: none;
+  background: transparent;
 }
 
 .nav-links a:hover,
@@ -72,12 +73,16 @@ a {
   transform: translateY(-2px);
 }
 
-/* === Logout button style === */
+/* === Logout Button === */
 .logout-btn {
   background: #ef4444;
   color: #fff;
   border: none;
   cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .logout-btn:hover {
@@ -85,7 +90,7 @@ a {
   transform: translateY(-2px);
 }
 
-/* === Main layout === */
+/* === Main Layout === */
 .main {
   padding: 3rem 1.5rem;
   transition: padding 0.3s ease;
@@ -93,7 +98,7 @@ a {
 
 /* === Page Sections === */
 .page {
-  max-width: 800px;
+  max-width: 1200px;
   margin: auto;
   text-align: center;
   padding: 2rem;
@@ -165,25 +170,104 @@ a {
 }
 
 /* === Goals Cards === */
-.goals-list {
+.goals-list,
+.goals-grid {
   margin-top: 1.5rem;
   display: grid;
   gap: 1.5rem;
 }
 
-.goal-card {
+.goals-list {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.goals-grid {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.goal-card,
+.metric-card {
   padding: 1.5rem;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: default;
+  text-align: center;
 }
 
-.goal-card:hover {
+.goal-card:hover,
+.metric-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
 }
 
+/* === Dashboard Metrics === */
+.dashboard-metrics {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.total-saved {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #fff;
+}
+
+.completed-metric {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.on-track-metric {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.past-due-metric {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.currency-amount {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* === Admin Buttons === */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-delete {
+  background: #ef4444;
+}
+
+.btn-delete:hover {
+  background: #dc2626;
+}
+
+.btn-reset {
+  background: #facc15;
+  color: #1e293b;
+}
+
+.btn-reset:hover {
+  background: #eab308;
+}
+
+/* === Deposit Section === */
 .deposit-section {
   display: flex;
   gap: 0.8rem;
@@ -225,110 +309,10 @@ progress::-webkit-progress-value {
   background-color: #2563eb;
 }
 
-/* === Admin Panel Cards === */
-.admin-card {
-  padding: 1.5rem;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* === Empty / Loading States === */
+.admin-loading,
+.admin-empty {
   text-align: center;
+  color: #6b7280;
+  margin-top: 1.5rem;
 }
-
-.admin-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-}
-
-.admin-card h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #0f172a;
-}
-
-.admin-card p {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  color: #475569;
-}
-
-.admin-card button {
-  padding: 0.6rem 1rem;
-  margin-right: 0.5rem;
-  border-radius: 10px;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #fff;
-}
-
-.admin-card .btn-delete {
-  background: #ef4444;
-}
-
-.admin-card .btn-delete:hover {
-  background: #dc2626;
-  transform: translateY(-2px);
-}
-
-.admin-card .btn-reset {
-  background: #facc15;
-  color: #1e293b;
-}
-
-.admin-card .btn-reset:hover {
-  background: #fbbf24;
-  transform: translateY(-2px);
-}
-
-/* === Dashboard Metrics === */
-.dashboard-container {
-  max-width: 900px;
-  margin: auto;
-  text-align: center;
-  padding: 2rem;
-}
-
-.dashboard-container h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 1.5rem;
-}
-
-.dashboard-metrics {
-  display: grid;
-  gap: 1.5rem;
-}
-
-.metric-card {
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.metric-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-}
-
-.metric-card h3 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #0f172a;
-}
-
-.metric-card p {
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.completed-metric { color: #16a34a; } /* green */
-.on-track-metric { color: #facc15; } /* yellow */
-.past-due-metric { color: #dc2626; } /* red */
-.currency-amount { color: #2563eb; } /* blue */
