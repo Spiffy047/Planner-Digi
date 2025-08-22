@@ -8,30 +8,43 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function getSessionUser() {
-      const { data: { user: loggedInUser } } = await supabase.auth.getUser();
-      if (!loggedInUser) return;
-
+    const fetchUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      const loggedInUser = session?.user || null;
       setUser(loggedInUser);
 
-      // Check if user is admin
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", loggedInUser.id)
-        .single();
+      if (loggedInUser) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", loggedInUser.id)
+          .single();
 
-      setIsAdmin(profile?.role === "admin");
-    }
+        setIsAdmin(profile?.role === "admin");
+      }
+    };
 
-    getSessionUser();
+    fetchUser();
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
-      if (!session?.user) setIsAdmin(false);
+      const loggedInUser = session?.user || null;
+      setUser(loggedInUser);
+
+      if (loggedInUser) {
+        supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", loggedInUser.id)
+          .single()
+          .then(({ data: profile }) => setIsAdmin(profile?.role === "admin"));
+      } else {
+        setIsAdmin(false);
+      }
     });
 
-    return () => listener.subscription.unsubscribe();
+    return () => {
+      listener.subscription.unsubscribe();
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -46,19 +59,23 @@ export default function Navbar() {
       <div className="logo">PlannerDigi</div>
       <ul className="nav-links">
         <li><Link to="/">Home</Link></li>
+
         {!user && (
           <>
             <li><Link to="/login">Login</Link></li>
             <li><Link to="/signup">Sign Up</Link></li>
           </>
         )}
+
         {user && (
           <>
             <li><Link to="/dashboard">Dashboard</Link></li>
             <li><Link to="/goals">Goals</Link></li>
             {isAdmin && <li><Link to="/admin">Manage Users</Link></li>}
             <li>
-              <button onClick={handleLogout} className="logout-btn">Logout</button>
+              <button onClick={handleLogout} className="logout-btn">
+                Logout
+              </button>
             </li>
           </>
         )}
