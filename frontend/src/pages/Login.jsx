@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { supabase } from "../supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: ""
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -14,16 +13,24 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const { email, password } = formData;
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
     if (error) {
       setMessage("❌ " + error.message);
     } else {
       setMessage("✅ Login successful!");
-      // Example: save session
+      // Save session if you want
       localStorage.setItem("supabaseSession", JSON.stringify(data.session));
+
+      // Redirect to goals page
+      setTimeout(() => {
+        navigate("/goals");
+      }, 1000);
     }
   };
 
