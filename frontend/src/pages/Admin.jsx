@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../supabase";
+import { supabase } from "../supabaseClient";
 
 export default function Admin() {
   const [users, setUsers] = useState([]);
@@ -51,30 +51,39 @@ export default function Admin() {
     }
   };
 
-  if (loading) return <p>Loading users...</p>;
+  if (loading)
+    return <p className="text-center text-gray-500 mt-6">Loading users...</p>;
 
   return (
     <div className="page">
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+
       {users.length === 0 ? (
-        <p>No users found.</p>
+        <p className="text-gray-500 mt-6">No users found.</p>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {users.map((user) => (
-            <div key={user.id} className="p-5 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
-              <h2 className="text-xl font-semibold mb-2">User ID: {user.id}</h2>
-              <p>Role: {user.role}</p>
-              <p>Joined: {new Date(user.created_at).toLocaleDateString()}</p>
-              <div className="mt-3 flex gap-2">
+            <div
+              key={user.id}
+              className="p-5 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <h2 className="text-xl font-semibold mb-2 text-gray-800">
+                User ID: {user.id}
+              </h2>
+              <p className="text-gray-600 mb-1">Role: {user.role}</p>
+              <p className="text-gray-600 mb-3">
+                Joined: {new Date(user.created_at).toLocaleDateString()}
+              </p>
+              <div className="flex gap-2 mt-3">
                 <button
-                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                   onClick={() => handleDeleteUser(user.id)}
+                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
                 >
                   Delete User
                 </button>
                 <button
-                  className="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
                   onClick={() => handleResetGoals(user.id)}
+                  className="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition-colors"
                 >
                   Reset Goals
                 </button>

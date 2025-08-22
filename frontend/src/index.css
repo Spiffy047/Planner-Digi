@@ -66,43 +66,6 @@ a {
   color: #fff;
   transform: translateY(-2px);
 }
-/* === Admin Panel Cards === */
-.admin-card {
-  @apply p-5 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow;
-}
-
-.admin-card h2 {
-  @apply text-xl font-semibold mb-2 text-gray-800;
-}
-
-.admin-card p {
-  @apply text-gray-600 mb-1;
-}
-
-/* === Admin Buttons === */
-.admin-card .btn {
-  @apply px-3 py-1 rounded text-white font-medium transition-colors duration-200;
-}
-
-.admin-card .btn-delete {
-  @apply bg-red-500 hover:bg-red-600;
-}
-
-.admin-card .btn-reset {
-  @apply bg-yellow-400 hover:bg-yellow-500;
-}
-
-/* === Grid Layout (already applied in JSX, optional fallback) === */
-.admin-grid {
-  @apply grid gap-6 md:grid-cols-2 lg:grid-cols-3;
-}
-
-/* === Loading / Empty state === */
-.admin-loading,
-.admin-empty {
-  @apply text-center text-gray-500 mt-6;
-}
-
 
 /* === Logout button style === */
 .logout-btn {
